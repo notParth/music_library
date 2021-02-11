@@ -36,7 +36,7 @@ public class music_controller {
     private Song prevSong;
     private int prevIndex;
     //private String song = "";
-    //private int index = -1;
+   // private int index = -1;
 
     public void start(Stage mainStage) throws Exception{
 
@@ -46,14 +46,17 @@ public class music_controller {
         obsList = FXCollections.observableArrayList();
         list_view.setItems(obsList);
         list_view.getSelectionModel().select(0);
+
+        list_view.setItems(obsList);
         list_view.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
-                    //I'm having trouble implementing the listener (i keep getting null pointer exceptions)!! the block of code below is what i wrote, the one below that is what we had before
-
-                    /*song_name.setText(newVal.getName());
-                    artist_name.setText(newVal.getArtist());
-                    album_name.setText(newVal.getAlbum());
-                    song_year.setText(newVal.getYear());*/
+                    int index = list_view.getSelectionModel().getSelectedIndex();
+                    if(index != -1){
+                        song_name.setText(newVal.getName());
+                        artist_name.setText(newVal.getArtist());
+                        album_name.setText(newVal.getAlbum());
+                        song_year.setText(newVal.getYear());
+                    }
 
                       /* list_view.getSelectionModel().selectedIndexProperty().addListener(
                 (obs, oldVal, newVal) -> storeItemDetails(mainStage)
@@ -99,6 +102,7 @@ public class music_controller {
             obsList.add(newSong); //add to observable list
             prevSong = newSong; //keep track of previous song
             list_view.getSelectionModel().select(newSong); //select added song
+
 
             Song songComp = new Song(); //create comparator, sort alphabetically
             FXCollections.sort(obsList, songComp);
