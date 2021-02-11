@@ -40,13 +40,12 @@ public class music_controller {
 
         mainStage.setTitle("Song Library App");
 
-
         obsList = FXCollections.observableArrayList();
         list_view.setItems(obsList);
         list_view.getSelectionModel().select(0);
 
         list_view.setItems(obsList);
-        list_view.getSelectionModel().selectedItemProperty().addListener( //display details of selected iteam
+        list_view.getSelectionModel().selectedItemProperty().addListener( //display details of selected item
                 (obs, oldVal, newVal) -> {
                     index = list_view.getSelectionModel().getSelectedIndex();
                     if(index != -1){
@@ -55,7 +54,6 @@ public class music_controller {
                         album_name.setText(newVal.getAlbum());
                         song_year.setText(newVal.getYear());
                     }
-
                       /* list_view.getSelectionModel().selectedIndexProperty().addListener(
                 (obs, oldVal, newVal) -> storeItemDetails(mainStage)
         ); */
@@ -68,7 +66,7 @@ public class music_controller {
     }
 
     public void add(){
-        //Cancel
+        //Confirm action
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
         cancelAlert.setTitle("WARNING");
         cancelAlert.setContentText("Confirm Action");
@@ -111,10 +109,14 @@ public class music_controller {
                 Song songComp = new Song(); //create comparator, sort alphabetically
                 FXCollections.sort(obsList, songComp);
             }
+        } else{ //reset detail fields to og values if actiona cancelled
+            index = list_view.getSelectionModel().getSelectedIndex();
+            song = obsList.get(index);
+            song_name.setText(song.getName());
+            artist_name.setText(song.getArtist());
+            album_name.setText(song.getAlbum());
+            song_year.setText(song.getYear());
         }
-
-
-
 
         /*String song = song_name.getText();
         String artist = artist_name.getText();
@@ -123,16 +125,16 @@ public class music_controller {
 
     }
     public void delete(){
-        //Cancel
+        //Confirm action
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
         cancelAlert.setTitle("WARNING");
         cancelAlert.setContentText("Confirm Action");
-        cancelAlert.setHeaderText("Are you sure you want to add this song?");
+        cancelAlert.setHeaderText("Are you sure you want to delete this song?");
 
         Optional<ButtonType> result = cancelAlert.showAndWait();
 
         if(result.get() == ButtonType.OK){
-            if(obsList.size() == 0){
+            if(obsList.size() == 0){ //if list is empty when trying to delete
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("ERROR");
                 errorAlert.setContentText("Problem: There are no songs in the library");
@@ -142,19 +144,26 @@ public class music_controller {
                 index = list_view.getSelectionModel().getSelectedIndex();
                 System.out.println(index);
                 obsList.remove(obsList.get(index));
-                if(obsList.size() == 0){
+                if(obsList.size() == 0){ //if list is empty after deleting
                     song_name.clear();
                     artist_name.clear();
                     album_name.clear();
                     song_year.clear();
                 } else{
-                    if (index+1 >= obsList.size()) {
+                    if (index+1 >= obsList.size()) { //if item is last in list select previous
                         list_view.getSelectionModel().select(index);
-                    } else{
+                    } else{ //if item is not last in list select next
                         list_view.getSelectionModel().selectNext();
                     }
                 }
             }
+        } else{ //reset detail fields to og values if actiona cancelled
+            index = list_view.getSelectionModel().getSelectedIndex();
+            song = obsList.get(index);
+            song_name.setText(song.getName());
+            artist_name.setText(song.getArtist());
+            album_name.setText(song.getAlbum());
+            song_year.setText(song.getYear());
         }
     }
     public void edit(ActionEvent e){
@@ -167,6 +176,7 @@ public class music_controller {
 
     } */
 
+//test for duplicate by iterating thru obsList
     private boolean isDupe(String name, String artist){
         for(int i=0; i<obsList.size(); i++){
             if(obsList.get(i).getName().equals(name) && obsList.get(i).getArtist().equals(artist)){
