@@ -6,47 +6,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="library.view.music_controller"
             prefHeight="400" prefWidth="600">
-    <Button fx:id = "delete_song" text = "Delete" onAction="#delete"
+    <Button fx:id = "delete_song" text = "Delete"
             AnchorPane.topAnchor="0"
             AnchorPane.leftAnchor="0" />
-    <Button fx:id = "edit_song" text = "Edit" onAction="#edit"
+    <Button fx:id = "edit_song" text = "Edit"
             AnchorPane.topAnchor="0"
             AnchorPane.rightAnchor="0" />
-    <Button fx:id = "new_song" text = "Add" onAction="#add"
+    <Button fx:id = "new_song" text = "Add"
             AnchorPane.topAnchor="0"
             AnchorPane.leftAnchor="200"
             AnchorPane.rightAnchor="200"/>
-    <Text text = "Enter song name:"
-          AnchorPane.topAnchor="30"
-          AnchorPane.leftAnchor="0" />
-    <Text text = "Enter artist name:"
-          AnchorPane.topAnchor="30"
-          AnchorPane.rightAnchor="50" />
-    <Text text = "Enter album (optional):"
-          AnchorPane.topAnchor="30"
-          AnchorPane.rightAnchor="180" />
-    <Text text = "Enter year (optional):"
-          AnchorPane.topAnchor="30"
-          AnchorPane.leftAnchor="150" />
-    <TextField fx:id="song_name" text = ""
-               AnchorPane.topAnchor="50"
-               AnchorPane.leftAnchor="0" />
-    <TextField fx:id="artist_name" text = ""
-               AnchorPane.topAnchor="50"
-               AnchorPane.rightAnchor="0" />
-    <TextField fx:id="album_name" text = ""
-               AnchorPane.topAnchor="50"
-               AnchorPane.rightAnchor="150" />
-    <TextField fx:id="song_year" text = ""
-               AnchorPane.topAnchor="50"
-               AnchorPane.leftAnchor="150" />
     <ListView fx:id = "list_view"
-              AnchorPane.topAnchor="75"
+              AnchorPane.topAnchor="25"
               AnchorPane.leftAnchor="0"
               AnchorPane.rightAnchor="0" />
 </AnchorPane>
