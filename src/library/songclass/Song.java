@@ -43,6 +43,13 @@ public class Song implements Comparator<Song>{
         return s;
     }
 
+    public String getDetails(){
+        String salbum = (this.album == null) ? "-" : this.album;
+        String syear = (this.year == null) ? "-" : this.year;
+        String s = "Song Details: \n Name: " + this.name + "\n Artist: " + this.artist + "\n Album: " + salbum + "\n Year: " + syear;
+        return s;
+    }
+
     public int compare(Song s1, Song s2){
         String name1 = s1.getName().toLowerCase();
         String name2 = s2.getName().toLowerCase();

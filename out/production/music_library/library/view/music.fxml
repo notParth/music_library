@@ -10,7 +10,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="library.view.music_controller"
-            prefHeight="400" prefWidth="600">
+            prefHeight="580" prefWidth="600">
     <Button fx:id = "delete_song" text = "Delete" onAction="#delete"
             AnchorPane.topAnchor="0"
             AnchorPane.leftAnchor="0" />
@@ -33,6 +33,10 @@
     <Text text = "Enter year (optional):"
           AnchorPane.topAnchor="30"
           AnchorPane.leftAnchor="150" />
+    <Label fx:id = "details" text = "Song Details: -"
+          AnchorPane.topAnchor="485"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0"/>
     <TextField fx:id="song_name" text = ""
                AnchorPane.topAnchor="50"
                AnchorPane.leftAnchor="0" />

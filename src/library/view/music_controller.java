@@ -21,6 +21,8 @@ public class music_controller {
     @FXML
     Button delete_song;
     @FXML
+    Label details;
+    @FXML
     TextField song_name;
     @FXML
     TextField artist_name;
@@ -49,6 +51,7 @@ public class music_controller {
                 (obs, oldVal, newVal) -> {
                     index = list_view.getSelectionModel().getSelectedIndex();
                     if(index != -1){
+                        details.setText(newVal.getDetails());
                         song_name.setText(newVal.getName());
                         artist_name.setText(newVal.getArtist());
                         album_name.setText(newVal.getAlbum());
@@ -156,6 +159,7 @@ public class music_controller {
                     artist_name.clear();
                     album_name.clear();
                     song_year.clear();
+                    details.setText("Song Details: -");
                 } else{
                     if (index+1 >= obsList.size()) { //if item is last in list select previous
                         list_view.getSelectionModel().select(index);
