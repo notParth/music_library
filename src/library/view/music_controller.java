@@ -36,9 +36,9 @@ public class music_controller {
     private int index;
 
     //private String song = "";
-   // private int index = -1;
+    // private int index = -1;
 
-    public void start(Stage mainStage) throws Exception{
+    public void start(Stage mainStage) throws Exception {
 
         mainStage.setTitle("Song Library App");
 
@@ -50,7 +50,7 @@ public class music_controller {
         list_view.getSelectionModel().selectedItemProperty().addListener( //display details of selected item
                 (obs, oldVal, newVal) -> {
                     index = list_view.getSelectionModel().getSelectedIndex();
-                    if(index != -1){
+                    if (index != -1) {
                         details.setText(newVal.getDetails());
                         song_name.setText(newVal.getName());
                         artist_name.setText(newVal.getArtist());
@@ -70,7 +70,7 @@ public class music_controller {
 
     }
 
-    public void add(){
+    public void add() {
         //Confirm action
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
         cancelAlert.setTitle("WARNING");
@@ -79,35 +79,35 @@ public class music_controller {
 
         Optional<ButtonType> result = cancelAlert.showAndWait();
 
-        if(result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             //Error Handling
-            if(song_name.getText().isEmpty()){ //no name
+            if (song_name.getText().isEmpty()) { //no name
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("ERROR");
                 errorAlert.setContentText("Problem: Your song must have a name");
                 errorAlert.setHeaderText("Whoops! Something went wrong when trying to add your song.");
                 errorAlert.showAndWait();
-            } else if(artist_name.getText().isEmpty()){ //no artist
+            } else if (artist_name.getText().isEmpty()) { //no artist
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("ERROR");
                 errorAlert.setContentText("Problem: Your song must have an artist");
                 errorAlert.setHeaderText("Whoops! Something went wrong when trying to add your song.");
                 errorAlert.showAndWait();
-            } else if(isDupe(song_name.getText(), artist_name.getText())){ //duplicate song
+            } else if (isDupe(song_name.getText(), artist_name.getText())) { //duplicate song
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("ERROR");
                 errorAlert.setContentText("Problem: The song you tried to edit already exists in the list");
                 errorAlert.setHeaderText("Whoops! Something went wrong when trying to add your song.");
                 errorAlert.showAndWait();
-            } else{
+            } else {
                 //Add Song
                 Song newSong = new Song(); //create new song w/textfield inputs
                 newSong.setName(song_name.getText().trim());
                 newSong.setArtist(artist_name.getText().trim());
-                if(song_year.getText() != null && !song_year.getText().isEmpty()){
+                if (song_year.getText() != null && !song_year.getText().isEmpty()) {
                     newSong.setYear(song_year.getText().trim());
                 }
-                if(album_name.getText() != null && !album_name.getText().isEmpty()){
+                if (album_name.getText() != null && !album_name.getText().isEmpty()) {
                     newSong.setAlbum(album_name.getText().trim());
                 }
 
@@ -119,21 +119,21 @@ public class music_controller {
                 Song songComp = new Song(); //create comparator, sort alphabetically
                 FXCollections.sort(obsList, songComp);
             }
-        } else{ //reset detail fields to og values if actiona cancelled
+        }/*else{ //reset detail fields to og values if actiona cancelled
             index = list_view.getSelectionModel().getSelectedIndex();
             song = obsList.get(index);
             song_name.setText(song.getName());
             artist_name.setText(song.getArtist());
             album_name.setText(song.getAlbum());
             song_year.setText(song.getYear());
-        }
+        } */
+    }
 
         /*String song = song_name.getText();
         String artist = artist_name.getText();
         String album = album_name.getText();
         String year = song_year.getText(); */
 
-    }
     public void delete(){
         //Confirm action
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -143,7 +143,7 @@ public class music_controller {
 
         Optional<ButtonType> result = cancelAlert.showAndWait();
 
-        if(result.get() == ButtonType.OK){
+        if(result.get() == ButtonType.OK){ //this part of the code SHOULD be working properly now but it gets really messy bc i hardcoded some of it. feel free to take a shot at fixing it! :')
             if(obsList.size() == 0){ //if list is empty when trying to delete
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("ERROR");
@@ -151,8 +151,8 @@ public class music_controller {
                 errorAlert.setHeaderText("Whoops! Something went wrong when trying to delete your song.");
                 errorAlert.showAndWait();
             }else{
-                index = list_view.getSelectionModel().getSelectedIndex();
-                System.out.println(index);
+                int ind = list_view.getSelectionModel().getSelectedIndex();
+                index = ind; //when i use index, obsList.remove subtracts 1 from it and i dont know why so that's why this line is here
                 obsList.remove(obsList.get(index));
                 if(obsList.size() == 0){ //if list is empty after deleting
                     song_name.clear();
@@ -161,21 +161,23 @@ public class music_controller {
                     song_year.clear();
                     details.setText("Song Details: -");
                 } else{
-                    if (index+1 >= obsList.size()) { //if item is last in list select previous
+                    if (ind >= obsList.size()) { //if item is last in list select previous
                         list_view.getSelectionModel().select(index);
-                    } else{ //if item is not last in list select next
+                    } else if(ind == 0){
+                        list_view.getSelectionModel().select(0); //idk why its not working so i just hardcoded it in :/
+                    } else{
                         list_view.getSelectionModel().selectNext();
                     }
                 }
             }
-        } else{ //reset detail fields to og values if actiona cancelled
+        } /*else{ //reset detail fields to og values if actiona cancelled
             index = list_view.getSelectionModel().getSelectedIndex();
             song = obsList.get(index);
             song_name.setText(song.getName());
             artist_name.setText(song.getArtist());
             album_name.setText(song.getAlbum());
             song_year.setText(song.getYear());
-        }
+        } */
     }
     public void edit(){
         //Confirm action
@@ -235,7 +237,14 @@ public class music_controller {
 
 
             }
-        }
+        }/*else{ //reset detail fields to og values if actiona cancelled
+            index = list_view.getSelectionModel().getSelectedIndex();
+            song = obsList.get(index);
+            song_name.setText(song.getName());
+            artist_name.setText(song.getArtist());
+            album_name.setText(song.getAlbum());
+            song_year.setText(song.getYear());
+        } */
 
     }
 
