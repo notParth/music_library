@@ -63,6 +63,8 @@ public class music_controller {
         //add
         new_song.setOnAction(e -> add());
         delete_song.setOnAction(e -> delete());
+        edit_song.setOnAction(e -> edit());
+
     }
 
     public void add(){
@@ -91,7 +93,7 @@ public class music_controller {
             } else if(isDupe(song_name.getText(), artist_name.getText())){ //duplicate song
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("ERROR");
-                errorAlert.setContentText("Problem: Your song is already in the list");
+                errorAlert.setContentText("Problem: The song you tried to edit already exists in the list");
                 errorAlert.setHeaderText("Whoops! Something went wrong when trying to add your song.");
                 errorAlert.showAndWait();
             } else{
@@ -99,8 +101,13 @@ public class music_controller {
                 Song newSong = new Song(); //create new song w/textfield inputs
                 newSong.setName(song_name.getText().trim());
                 newSong.setArtist(artist_name.getText().trim());
-                newSong.setAlbum(album_name.getText().trim());
-                newSong.setYear(song_year.getText().trim());
+                if(song_year.getText() != null && !song_year.getText().isEmpty()){
+                    newSong.setYear(song_year.getText().trim());
+                }
+                if(album_name.getText() != null && !album_name.getText().isEmpty()){
+                    newSong.setAlbum(album_name.getText().trim());
+                }
+
 
                 obsList.add(newSong); //add to observable list
                 list_view.getSelectionModel().select(newSong); //select added song
@@ -166,7 +173,65 @@ public class music_controller {
             song_year.setText(song.getYear());
         }
     }
-    public void edit(ActionEvent e){
+    public void edit(){
+        //Confirm action
+        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        cancelAlert.setTitle("WARNING");
+        cancelAlert.setContentText("Confirm Action");
+        cancelAlert.setHeaderText("Are you sure you want to edit this song?");
+
+        Optional<ButtonType> result = cancelAlert.showAndWait();
+
+        index = list_view.getSelectionModel().getSelectedIndex();
+
+        if(result.get() == ButtonType.OK) {
+            if(song_name.getText().isEmpty()){ //no name
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("ERROR");
+                errorAlert.setContentText("Problem: Your song must have a name");
+                errorAlert.setHeaderText("Whoops! Something went wrong when trying to edit your song.");
+                errorAlert.showAndWait();
+            } else if(artist_name.getText().isEmpty()) { //no artist
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("ERROR");
+                errorAlert.setContentText("Problem: Your song must have an artist");
+                errorAlert.setHeaderText("Whoops! Something went wrong when trying to edit your song.");
+                errorAlert.showAndWait();
+            } else if(list_view.getSelectionModel().getSelectedIndex() == -1){
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("ERROR");
+                errorAlert.setContentText("Problem: No song is selected");
+                errorAlert.setHeaderText("Whoops! Something went wrong when trying to edit your song.");
+                errorAlert.showAndWait();
+            } else if((isDupe(song_name.getText(), artist_name.getText())) && (!song_name.getText().equals(obsList.get(index).getName()) || !artist_name.getText().equals(obsList.get(index).getArtist()))){
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("ERROR");
+                errorAlert.setContentText("Problem: Your song is already in the list");
+                errorAlert.setHeaderText("Whoops! Something went wrong when trying to edit your song.");
+                errorAlert.showAndWait();
+            } else{
+                Song editedSong = new Song();
+                int index = list_view.getSelectionModel().getSelectedIndex();
+                song = obsList.get(index);
+                editedSong.setName(song_name.getText().trim());
+                editedSong.setArtist(artist_name.getText().trim());
+                if(album_name.getText() != null && !album_name.getText().isEmpty()){
+                    editedSong.setAlbum(album_name.getText().trim());
+                }
+                if(song_year.getText() != null && !song_year.getText().isEmpty()){
+                    editedSong.setYear(song_year.getText().trim());
+                }
+                obsList.remove(index);
+                obsList.add(editedSong); //add to observable list
+                list_view.getSelectionModel().select(editedSong); //select added song
+
+
+                Song songComp = new Song(); //create comparator, sort alphabetically
+                FXCollections.sort(obsList, songComp);
+
+
+            }
+        }
 
     }
 
