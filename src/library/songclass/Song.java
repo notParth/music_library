@@ -1,17 +1,15 @@
 package library.songclass;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class Song implements Comparator<Song>{
+public class Song implements Comparator<Song>, Serializable {
 
     private String name;
     private String artist;
     private String album;
     private String year;
-
-    public Song(){
-
-    }
 
     public String getName(){
         return this.name;

@@ -22,6 +22,9 @@ public class SongLib extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
+        //the closing event of the application invokes the method shutdown()
+        //shutdown is used to creates and store session data
+        stage.setOnHidden(e -> listController.shutdown());
         stage.show();
     }
 

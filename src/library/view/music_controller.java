@@ -8,6 +8,11 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import library.songclass.Song;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -41,8 +46,18 @@ public class music_controller {
     public void start(Stage mainStage) throws Exception {
 
         mainStage.setTitle("Song Library App");
+        //Used to check if there is any session data available
+        File file = new File("SongObjectSaveFile.ser");
+        if(file.exists()) {
+            //reading previously session's stored data and feeding it into the obsList
+            InputStream in = Files.newInputStream(Path.of("SongObjectSaveFile.ser"));
+            ObjectInputStream ois = new ObjectInputStream(in);
+            List<Song> list = (List<Song>) ois.readObject();
+            obsList = FXCollections.observableArrayList(list);
+        }
+        else
+            obsList = FXCollections.observableArrayList();
 
-        obsList = FXCollections.observableArrayList();
         list_view.setItems(obsList);
         list_view.getSelectionModel().select(0);
 
@@ -68,6 +83,27 @@ public class music_controller {
         delete_song.setOnAction(e -> delete());
         edit_song.setOnAction(e -> edit());
 
+    }
+
+    //this methods gets called when the application is closed
+    //this also stores "session" data so that stored songs can be accessed across sessions
+    public void shutdown() {
+        try{
+            File file = new File("SongObjectSaveFile.ser");
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream("SongObjectSaveFile.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            //Since observable list is not serializable, we use ArrayList
+            oos.writeObject(new ArrayList<Song>(obsList));
+            oos.close();
+
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void add() {
@@ -263,4 +299,6 @@ public class music_controller {
         }
         return false;
     }
+
+
 }
