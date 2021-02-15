@@ -1,3 +1,6 @@
+//CS213 Assignment 1: SongLib
+//Names: Parth Patel, Amanda Kang
+
 package library.songclass;
 import java.util.Comparator;
 import java.util.Locale;

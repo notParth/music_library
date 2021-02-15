@@ -1,3 +1,6 @@
+//CS213 Assignment 1: SongLib
+//Names: Parth Patel, Amanda Kang
+
 package library.view;
 
 import javafx.collections.FXCollections;
