@@ -80,10 +80,18 @@ public class music_controller {
                 obsList.add(song);
             }
             sc.close();
+
+            list_view.setItems(obsList);
+            Song firstSong = obsList.get(0);
+            list_view.getSelectionModel().select(firstSong);
+            details.setText(firstSong.getDetails());
+            song_name.setText(firstSong.getName());
+            artist_name.setText(firstSong.getArtist());
+            album_name.setText(firstSong.getAlbum());
+            song_year.setText(firstSong.getYear());
+
         }
 
-        list_view.setItems(obsList);
-        list_view.getSelectionModel().select(0);
 
         list_view.setItems(obsList);
         list_view.getSelectionModel().selectedItemProperty().addListener( //display details of selected item
