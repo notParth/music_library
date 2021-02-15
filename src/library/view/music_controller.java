@@ -1,5 +1,5 @@
 //CS213 Assignment 1: SongLib
-//Names: Parth Patel, Amanda Kang
+//Names: Parth Patel (psp116), Amanda Kang (ajk267)
 
 package library.view;
 
