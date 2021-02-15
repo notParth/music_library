@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 
 public class music_controller {
@@ -46,17 +47,40 @@ public class music_controller {
     public void start(Stage mainStage) throws Exception {
 
         mainStage.setTitle("Song Library App");
+        obsList = FXCollections.observableArrayList();
         //Used to check if there is any session data available
-        File file = new File("SongObjectSaveFile.ser");
-        if(file.exists()) {
+        File file = new File("song_data.txt");
+        if (file.exists()) {
             //reading previously session's stored data and feeding it into the obsList
-            InputStream in = Files.newInputStream(Path.of("SongObjectSaveFile.ser"));
-            ObjectInputStream ois = new ObjectInputStream(in);
-            List<Song> list = (List<Song>) ois.readObject();
-            obsList = FXCollections.observableArrayList(list);
+            Scanner sc = new Scanner(file);
+            while(sc.hasNextLine()){
+                String line = sc.nextLine();
+                Scanner scn = new Scanner(line).useDelimiter("\\*");
+                Song song = new Song();
+                int cnt = 1;
+                while (scn.hasNext()){
+                    if (cnt == 1){
+                        song.setName(scn.next());
+                        cnt++;
+                    }
+                    else if (cnt == 2){
+                        song.setArtist(scn.next());
+                        cnt++;
+                    }
+                    else if (cnt == 3){
+                        song.setAlbum(scn.next());
+                        cnt++;
+                    }
+                    else{
+                        if (cnt == 4)
+                            song.setYear(scn.next());
+                    }
+                }
+                scn.close();
+                obsList.add(song);
+            }
+            sc.close();
         }
-        else
-            obsList = FXCollections.observableArrayList();
 
         list_view.setItems(obsList);
         list_view.getSelectionModel().select(0);
@@ -89,14 +113,22 @@ public class music_controller {
     //this also stores "session" data so that stored songs can be accessed across sessions
     public void shutdown() {
         try{
-            File file = new File("SongObjectSaveFile.ser");
+            File file = new File("song_data.txt");
             file.createNewFile();
-            FileOutputStream fos = new FileOutputStream("SongObjectSaveFile.ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            //Since observable list is not serializable, we use ArrayList
-            oos.writeObject(new ArrayList<Song>(obsList));
-            oos.close();
-
+            FileWriter myWriter = new FileWriter(file);
+            for (Song song : obsList){
+                String song_name = song.getName();
+                String artist = song.getArtist();
+                String album = song.getAlbum();
+                String year = song.getYear();
+                myWriter.write(song_name + "*" +artist);
+                if(album != null)
+                    myWriter.write("*" + album );
+                if(year != null)
+                    myWriter.write("*" + year);
+                myWriter.write("\n");
+            }
+            myWriter.close();
         }
         catch (FileNotFoundException e){
             e.printStackTrace();
