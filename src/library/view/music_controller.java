@@ -53,7 +53,7 @@ public class music_controller {
         obsList = FXCollections.observableArrayList();
         //Used to check if there is any session data available
         File file = new File("song_data.txt");
-        if (file.exists()) {
+        if (file.exists() && file.length() != 0) {
             //reading previously session's stored data and feeding it into the obsList
             Scanner sc = new Scanner(file);
             while(sc.hasNextLine()){
